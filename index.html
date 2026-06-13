@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>புலவர் சுடலைமுத்து — கவிதை அகராதி</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;600;700;800&family=Hind+Madurai:wght@300;400;500;600&family=Source+Serif+4:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --parchment: #f7f1e3;
+    --parchment-deep: #efe6d2;
+    --ink: #2b2420;
+    --ink-soft: #5a4f44;
+    --maroon: #7a2e2e;
+    --maroon-deep: #5e2222;
+    --gold: #c9a648;
+    --teal: #1f4e4e;
+    --teal-soft: #d8e6e3;
+    --line: #d9cdb4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Hind Madurai', sans-serif;
+    background: var(--parchment);
+    color: var(--ink);
+    line-height: 1.7;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(201,166,72,0.06), transparent 40%),
+      radial-gradient(circle at 80% 60%, rgba(122,46,46,0.05), transparent 40%);
+  }
+
+  /* ===== Header ===== */
+  header {
+    text-align: center;
+    padding: 64px 24px 40px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+
+  .eyebrow {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--maroon);
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: 'Catamaran', sans-serif;
+    font-weight: 800;
+    font-size: clamp(36px, 7vw, 64px);
+    color: var(--maroon-deep);
+    letter-spacing: 0.01em;
+  }
+
+  .subtitle {
+    font-family: 'Hind Madurai', sans-serif;
+    font-size: 18px;
+    color: var(--ink-soft);
+    margin-top: 10px;
+    font-weight: 400;
+  }
+
+  .palm-divider {
+    width: 100%;
+    max-width: 360px;
+    height: 14px;
+    margin: 28px auto 0;
+    background: repeating-linear-gradient(
+      to right,
+      var(--gold) 0px, var(--gold) 2px,
+      transparent 2px, transparent 10px
+    );
+    opacity: 0.6;
+  }
+
+  /* ===== Controls ===== */
+  .controls {
+    max-width: 880px;
+    margin: 36px auto 0;
+    padding: 0 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .filter-chip {
+    font-family: 'Hind Madurai', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 8px 20px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-chip:hover {
+    border-color: var(--maroon);
+    color: var(--maroon);
+  }
+
+  .filter-chip.active {
+    background: var(--maroon);
+    color: var(--parchment);
+    border-color: var(--maroon);
+  }
+
+  .add-poem-link {
+    display: inline-block;
+    margin: 28px auto 0;
+    text-align: center;
+    width: 100%;
+  }
+
+  .add-poem-link a {
+    font-family: 'Hind Madurai', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--teal);
+    text-decoration: none;
+    border-bottom: 2px solid var(--teal-soft);
+    padding-bottom: 2px;
+    transition: border-color 0.2s ease;
+  }
+
+  .add-poem-link a:hover {
+    border-color: var(--teal);
+  }
+
+  /* ===== Timeline / Poem List ===== */
+  main {
+    max-width: 760px;
+    margin: 48px auto 100px;
+    padding: 0 24px;
+    position: relative;
+  }
+
+  main::before {
+    content: "";
+    position: absolute;
+    left: 24px;
+    top: 12px;
+    bottom: 12px;
+    width: 2px;
+    background: linear-gradient(to bottom, transparent, var(--gold) 6%, var(--gold) 94%, transparent);
+    opacity: 0.4;
+  }
+
+  @media (max-width: 600px) {
+    main::before { left: 8px; }
+  }
+
+  .poem-card {
+    position: relative;
+    padding: 32px 0 32px 56px;
+    border-bottom: 1px dashed var(--line);
+  }
+
+  @media (max-width: 600px) {
+    .poem-card { padding-left: 36px; }
+  }
+
+  .poem-card:last-child { border-bottom: none; }
+
+  .poem-marker {
+    position: absolute;
+    left: 16px;
+    top: 38px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--parchment);
+    border: 2px solid var(--gold);
+  }
+
+  @media (max-width: 600px) {
+    .poem-marker { left: 0; width: 14px; height: 14px; }
+  }
+
+  .poem-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .poem-date {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  .poem-category {
+    font-family: 'Hind Madurai', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 3px 12px;
+    border-radius: 999px;
+    background: var(--teal-soft);
+    color: var(--teal);
+  }
+
+  .poem-title {
+    font-family: 'Catamaran', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--maroon-deep);
+    margin-bottom: 14px;
+  }
+
+  .poem-text {
+    font-family: 'Hind Madurai', sans-serif;
+    font-size: 18px;
+    line-height: 1.95;
+    color: var(--ink);
+    white-space: pre-line;
+    margin-bottom: 16px;
+  }
+
+  .poem-footer-info {
+    font-family: 'Source Serif 4', serif;
+    font-size: 14px;
+    color: var(--ink-soft);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .poem-footer-info span strong {
+    color: var(--ink);
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  /* ===== States ===== */
+  .loading, .empty {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--ink-soft);
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 17px;
+  }
+
+  /* ===== Footer ===== */
+  footer {
+    text-align: center;
+    padding: 32px 24px 64px;
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-soft);
+    border-top: 1px solid var(--line);
+  }
+
+  footer a {
+    color: var(--maroon);
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">An Archive of Verse</div>
+  <h1>புலவர் சுடலைமுத்து</h1>
+  <p class="subtitle">கவிதைகள் — காலவரிசையில்</p>
+  <div class="palm-divider"></div>
+</header>
+
+<div class="controls" id="filters">
+  <button class="filter-chip active" data-category="all">அனைத்தும்</button>
+</div>
+
+<div class="add-poem-link">
+  <a href="FORM_URL_PLACEHOLDER" target="_blank" rel="noopener">+ புதிய கவிதையைச் சேர்க்க</a>
+</div>
+
+<main id="poem-list">
+  <div class="loading">கவிதைகள் ஏற்றப்படுகின்றன…</div>
+</main>
+
+<footer>
+  <p>இது ஒரு வளரும் தொகுப்பு — புலவர் சுடலைமுத்து அவர்களின் கவிதைகளின் காப்பகம்.</p>
+</footer>
+
+<script>
+  // ===== CONFIGURATION =====
+  // Replace with your published Google Sheet CSV URL
+  // (File > Share > Publish to web > select sheet > CSV)
+  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSzZaFgvBmSlwwXuX5uwXH0IK3bHF0-T4VE0YXnGvklAxQpiG1IY6EPBgL8O73VUAoAf-HT5iawdohs/pub?output=csv";
+
+  // Expected columns (case-insensitive, flexible order):
+  // Title, Poem, Occasion, Dedicated to, Date, Category, Author
+
+  function parseCSV(text) {
+    const rows = [];
+    let row = [], field = '', inQuotes = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (inQuotes) {
+        if (c === '"') {
+          if (text[i+1] === '"') { field += '"'; i++; }
+          else inQuotes = false;
+        } else field += c;
+      } else {
+        if (c === '"') inQuotes = true;
+        else if (c === ',') { row.push(field); field = ''; }
+        else if (c === '\n' || c === '\r') {
+          if (c === '\r' && text[i+1] === '\n') i++;
+          row.push(field); field = '';
+          if (row.some(x => x.trim() !== '')) rows.push(row);
+          row = [];
+        } else field += c;
+      }
+    }
+    if (field !== '' || row.length) { row.push(field); rows.push(row); }
+    return rows;
+  }
+
+  function normalizeKey(k) {
+    return k.trim().toLowerCase().replace(/\s+/g, '');
+  }
+
+  function parseDate(d) {
+    if (!d) return null;
+    d = d.trim();
+    // Handle DD-MM-YYYY or DD.MM.YYYY
+    const m = d.match(/^(\d{1,2})[-.\/](\d{1,2})[-.\/](\d{2,4})$/);
+    if (m) {
+      let [, dd, mm, yyyy] = m;
+      if (yyyy.length === 2) yyyy = '20' + yyyy;
+      return new Date(`${yyyy}-${mm.padStart(2,'0')}-${dd.padStart(2,'0')}`);
+    }
+    const parsed = new Date(d);
+    return isNaN(parsed) ? null : parsed;
+  }
+
+  function formatDate(dateObj, raw) {
+    if (!dateObj) return raw || '';
+    const months = ['ஜனவரி','பிப்ரவரி','மார்ச்','ஏப்ரல்','மே','ஜூன்','ஜூலை','ஆகஸ்ட்','செப்டம்பர்','அக்டோபர்','நவம்பர்','டிசம்பர்'];
+    return `${dateObj.getDate()} ${months[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
+
+  async function loadPoems() {
+    const listEl = document.getElementById('poem-list');
+    try {
+      const res = await fetch(SHEET_CSV_URL);
+      if (!res.ok) throw new Error('Failed to fetch sheet');
+      const text = await res.text();
+      const rows = parseCSV(text);
+      if (rows.length < 2) throw new Error('No data');
+
+      const headers = rows[0].map(normalizeKey);
+      const idx = {
+        title: headers.indexOf('title'),
+        poem: headers.indexOf('poem'),
+        occasion: headers.indexOf('occasion'),
+        dedicatedto: headers.indexOf('dedicatedto'),
+        date: headers.indexOf('date'),
+        category: headers.indexOf('category'),
+        author: headers.indexOf('author'),
+      };
+
+      let poems = rows.slice(1)
+        .filter(r => r[idx.poem] && r[idx.poem].trim())
+        .map(r => ({
+          title: idx.title >= 0 ? r[idx.title]?.trim() : '',
+          poem: r[idx.poem]?.trim() || '',
+          occasion: idx.occasion >= 0 ? r[idx.occasion]?.trim() : '',
+          dedicatedTo: idx.dedicatedto >= 0 ? r[idx.dedicatedto]?.trim() : '',
+          dateRaw: idx.date >= 0 ? r[idx.date]?.trim() : '',
+          category: idx.category >= 0 ? r[idx.category]?.trim() : '',
+          author: idx.author >= 0 ? r[idx.author]?.trim() : '',
+        }));
+
+      poems.forEach(p => p.dateObj = parseDate(p.dateRaw));
+
+      // Sort: dated poems first (chronological), undated at the end
+      poems.sort((a, b) => {
+        if (a.dateObj && b.dateObj) return a.dateObj - b.dateObj;
+        if (a.dateObj && !b.dateObj) return -1;
+        if (!a.dateObj && b.dateObj) return 1;
+        return 0;
+      });
+
+      // Build category filter chips
+      const categories = [...new Set(poems.map(p => p.category).filter(Boolean))];
+      const filterContainer = document.getElementById('filters');
+      categories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-chip';
+        btn.dataset.category = cat;
+        btn.textContent = cat;
+        filterContainer.appendChild(btn);
+      });
+
+      filterContainer.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('filter-chip')) return;
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        e.target.classList.add('active');
+        render(e.target.dataset.category);
+      });
+
+      function render(filter) {
+        const filtered = filter === 'all'
+          ? poems
+          : poems.filter(p => p.category === filter);
+
+        if (!filtered.length) {
+          listEl.innerHTML = '<div class="empty">இந்தப் பகுப்பில் கவிதைகள் இல்லை.</div>';
+          return;
+        }
+
+        listEl.innerHTML = filtered.map(p => `
+          <div class="poem-card">
+            <div class="poem-marker"></div>
+            <div class="poem-meta-row">
+              ${p.dateObj || p.dateRaw ? `<span class="poem-date">${escapeHtml(formatDate(p.dateObj, p.dateRaw))}</span>` : ''}
+              ${p.category ? `<span class="poem-category">${escapeHtml(p.category)}</span>` : ''}
+            </div>
+            ${p.title ? `<div class="poem-title">${escapeHtml(p.title)}</div>` : ''}
+            <div class="poem-text">${escapeHtml(p.poem)}</div>
+            <div class="poem-footer-info">
+              ${p.author ? `<span><strong>ஆசிரியர்:</strong> ${escapeHtml(p.author)}</span>` : ''}
+              ${p.dedicatedTo ? `<span><strong>சமர்ப்பணம்:</strong> ${escapeHtml(p.dedicatedTo)}</span>` : ''}
+              ${p.occasion ? `<span><strong>நிகழ்வு:</strong> ${escapeHtml(p.occasion)}</span>` : ''}
+            </div>
+          </div>
+        `).join('');
+      }
+
+      render('all');
+
+    } catch (err) {
+      console.error(err);
+      listEl.innerHTML = `<div class="empty">கவிதைகளை ஏற்ற முடியவில்லை. தொடர்பு சரிபார்க்கவும்.<br><small style="font-family:monospace; font-style:normal;">${escapeHtml(err.message)}</small></div>`;
+    }
+  }
+
+  loadPoems();
+</script>
+
+</body>
+</html>
