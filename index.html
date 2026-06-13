@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;600;700;800&family=Hind+Madurai:wght@300;400;500;600&family=Source+Serif+4:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   :root {
     --parchment: #f7f1e3;
@@ -247,6 +249,115 @@
     font-style: normal;
   }
 
+  .download-btn {
+    margin-top: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Hind Madurai', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--maroon);
+    background: #fff;
+    border: 1px solid var(--maroon);
+    border-radius: 999px;
+    padding: 8px 18px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .download-btn:hover {
+    background: var(--maroon);
+    color: var(--parchment);
+  }
+
+  .download-btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
+  .download-btn svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+  }
+
+  /* ===== Hidden PDF render template ===== */
+  #pdf-render-area {
+    position: fixed;
+    top: -99999px;
+    left: -99999px;
+    width: 720px;
+    background: #fdf8ef;
+    background-image:
+      radial-gradient(circle at 15% 12%, rgba(201,166,72,0.10), transparent 45%),
+      radial-gradient(circle at 85% 85%, rgba(122,46,46,0.07), transparent 45%);
+    padding: 56px 60px;
+    box-sizing: border-box;
+    border: 1px solid #e6d9bd;
+  }
+
+  .pdf-eyebrow {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 18px;
+  }
+
+  .pdf-divider {
+    width: 220px;
+    height: 12px;
+    margin: 0 auto 36px;
+    background: repeating-linear-gradient(
+      to right,
+      var(--gold) 0px, var(--gold) 2px,
+      transparent 2px, transparent 9px
+    );
+    opacity: 0.55;
+  }
+
+  .pdf-title {
+    font-family: 'Catamaran', sans-serif;
+    font-weight: 800;
+    font-size: 30px;
+    color: var(--maroon-deep);
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .pdf-poem-text {
+    font-family: 'Hind Madurai', sans-serif;
+    font-size: 19px;
+    line-height: 2.05;
+    color: var(--ink);
+    white-space: pre-line;
+    text-align: center;
+    margin-bottom: 44px;
+  }
+
+  .pdf-signature {
+    text-align: right;
+    font-family: 'Catamaran', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--maroon-deep);
+    border-top: 1px solid #e6d9bd;
+    padding-top: 18px;
+  }
+
+  .pdf-signature .pdf-date {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+
   /* ===== States ===== */
   .loading, .empty {
     text-align: center;
@@ -289,6 +400,17 @@
 
 <div class="add-poem-link">
   <a href="FORM_URL_PLACEHOLDER" target="_blank" rel="noopener">+ புதிய கவிதையைச் சேர்க்க</a>
+</div>
+
+<div id="pdf-render-area">
+  <div class="pdf-eyebrow">An Archive of Verse — புலவர் சுடலைமுத்து</div>
+  <div class="pdf-divider"></div>
+  <div class="pdf-title" id="pdf-title" style="display:none;"></div>
+  <div class="pdf-poem-text" id="pdf-poem-text"></div>
+  <div class="pdf-signature">
+    <div id="pdf-author"></div>
+    <div class="pdf-date" id="pdf-date"></div>
+  </div>
 </div>
 
 <main id="poem-list">
@@ -433,7 +555,9 @@
           return;
         }
 
-        listEl.innerHTML = filtered.map(p => `
+        window.__currentFiltered = filtered;
+
+        listEl.innerHTML = filtered.map((p, i) => `
           <div class="poem-card">
             <div class="poem-marker"></div>
             <div class="poem-meta-row">
@@ -447,15 +571,86 @@
               ${p.dedicatedTo ? `<span><strong>சமர்ப்பணம்:</strong> ${escapeHtml(p.dedicatedTo)}</span>` : ''}
               ${p.occasion ? `<span><strong>நிகழ்வு:</strong> ${escapeHtml(p.occasion)}</span>` : ''}
             </div>
+            <button class="download-btn" data-index="${i}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              PDF பதிவிறக்கம்
+            </button>
           </div>
         `).join('');
       }
 
       render('all');
 
+      // PDF download handler
+      listEl.addEventListener('click', async (e) => {
+        const btn = e.target.closest('.download-btn');
+        if (!btn) return;
+        const idx = parseInt(btn.dataset.index, 10);
+        const data = window.__currentFiltered[idx];
+        await downloadPoemPDF(data, btn);
+      });
+
     } catch (err) {
       console.error(err);
       listEl.innerHTML = `<div class="empty">கவிதைகளை ஏற்ற முடியவில்லை. தொடர்பு சரிபார்க்கவும்.<br><small style="font-family:monospace; font-style:normal;">${escapeHtml(err.message)}</small></div>`;
+    }
+  }
+
+  async function downloadPoemPDF(p, btn) {
+    const origHTML = btn.innerHTML;
+    btn.disabled = true;
+    btn.textContent = 'தயாராகிறது…';
+
+    try {
+      const titleEl = document.getElementById('pdf-title');
+      const poemEl = document.getElementById('pdf-poem-text');
+      const authorEl = document.getElementById('pdf-author');
+      const dateEl = document.getElementById('pdf-date');
+      const area = document.getElementById('pdf-render-area');
+
+      if (p.title) {
+        titleEl.textContent = p.title;
+        titleEl.style.display = 'block';
+      } else {
+        titleEl.style.display = 'none';
+      }
+
+      poemEl.textContent = p.poem;
+      authorEl.textContent = p.author || '';
+      dateEl.textContent = (p.dateObj || p.dateRaw) ? formatDate(p.dateObj, p.dateRaw) : '';
+
+      if (document.fonts && document.fonts.ready) await document.fonts.ready;
+      await new Promise(r => setTimeout(r, 80));
+
+      const canvas = await html2canvas(area, {
+        scale: 2,
+        backgroundColor: '#fdf8ef',
+        useCORS: true
+      });
+
+      const imgData = canvas.toDataURL('image/jpeg', 0.95);
+      const { jsPDF } = window.jspdf;
+
+      const pdfWidth = 595.28; // A4 width in pt
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      const pdf = new jsPDF({
+        orientation: pdfHeight > pdfWidth ? 'portrait' : 'landscape',
+        unit: 'pt',
+        format: [pdfWidth, pdfHeight]
+      });
+
+      pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+
+      const filenameBase = (p.title || 'poem').trim().replace(/[^\u0B80-\u0BFFa-zA-Z0-9]+/g, '_').slice(0, 40);
+      pdf.save(`${filenameBase || 'poem'}.pdf`);
+
+    } catch (err) {
+      console.error('PDF generation failed:', err);
+      alert('PDF உருவாக்குவதில் சிக்கல். மீண்டும் முயற்சிக்கவும்.');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = origHTML;
     }
   }
 
