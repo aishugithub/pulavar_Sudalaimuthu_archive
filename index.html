@@ -297,17 +297,6 @@
     border: 1px solid #e6d9bd;
   }
 
-  .pdf-eyebrow {
-    font-family: 'Source Serif 4', serif;
-    font-style: italic;
-    font-size: 13px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--gold);
-    text-align: center;
-    margin-bottom: 18px;
-  }
-
   .pdf-divider {
     width: 220px;
     height: 12px;
@@ -327,6 +316,7 @@
     color: var(--maroon-deep);
     text-align: center;
     margin-bottom: 32px;
+    white-space: nowrap;
   }
 
   .pdf-poem-text {
@@ -334,7 +324,7 @@
     font-size: 19px;
     line-height: 2.05;
     color: var(--ink);
-    white-space: pre-line;
+    white-space: pre;
     text-align: center;
     margin-bottom: 44px;
   }
@@ -383,6 +373,19 @@
     color: var(--maroon);
     text-decoration: none;
   }
+
+  /* ===== Mobile refinements ===== */
+  @media (max-width: 600px) {
+    header { padding: 40px 16px 28px; }
+    .subtitle { font-size: 16px; }
+    main { padding: 0 12px; margin: 32px auto 60px; }
+    .poem-text { font-size: 16px; line-height: 1.85; }
+    .poem-title { font-size: 20px; }
+    .controls { padding: 0 12px; gap: 8px; }
+    .filter-chip { font-size: 13px; padding: 6px 14px; }
+    .poem-footer-info { font-size: 13px; gap: 10px; }
+    .download-btn { font-size: 13px; padding: 7px 14px; }
+  }
 </style>
 </head>
 <body>
@@ -403,7 +406,6 @@
 </div>
 
 <div id="pdf-render-area">
-  <div class="pdf-eyebrow">An Archive of Verse — புலவர் சுடலைமுத்து</div>
   <div class="pdf-divider"></div>
   <div class="pdf-title" id="pdf-title" style="display:none;"></div>
   <div class="pdf-poem-text" id="pdf-poem-text"></div>
@@ -622,6 +624,41 @@
       if (document.fonts && document.fonts.ready) await document.fonts.ready;
       await new Promise(r => setTimeout(r, 80));
 
+      // Determine widest line and shrink font so no line wraps
+      const availableWidth = area.clientWidth - 120; // minus left+right padding
+      let fontSize = 19;
+      poemEl.style.fontSize = fontSize + 'px';
+
+      // measure widest line using a temporary span
+      const measurer = document.createElement('span');
+      measurer.style.visibility = 'hidden';
+      measurer.style.position = 'absolute';
+      measurer.style.whiteSpace = 'pre';
+      measurer.style.fontFamily = "'Hind Madurai', sans-serif";
+      document.body.appendChild(measurer);
+
+      const lines = p.poem.split('\n');
+      let maxWidth = 0;
+
+      function measureMax(size) {
+        measurer.style.fontSize = size + 'px';
+        let max = 0;
+        for (const line of lines) {
+          measurer.textContent = line || ' ';
+          max = Math.max(max, measurer.offsetWidth);
+        }
+        return max;
+      }
+
+      maxWidth = measureMax(fontSize);
+      while (maxWidth > availableWidth && fontSize > 11) {
+        fontSize -= 0.5;
+        maxWidth = measureMax(fontSize);
+      }
+
+      document.body.removeChild(measurer);
+      poemEl.style.fontSize = fontSize + 'px';
+
       const canvas = await html2canvas(area, {
         scale: 2,
         backgroundColor: '#fdf8ef',
@@ -651,6 +688,7 @@
     } finally {
       btn.disabled = false;
       btn.innerHTML = origHTML;
+      document.getElementById('pdf-poem-text').style.fontSize = '';
     }
   }
 
