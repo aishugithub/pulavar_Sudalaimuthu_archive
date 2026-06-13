@@ -25,6 +25,11 @@
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
+  html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
   body {
     font-family: 'Hind Madurai', sans-serif;
     background: var(--parchment);
@@ -64,14 +69,14 @@
 
   @media (max-width: 600px) {
     h1 {
-      font-size: clamp(22px, 8.2vw, 40px);
+      font-size: clamp(20px, 7.6vw, 40px);
       letter-spacing: 0;
     }
   }
 
   @media (max-width: 380px) {
     h1 {
-      font-size: 7.8vw;
+      font-size: 7.2vw;
     }
   }
 
