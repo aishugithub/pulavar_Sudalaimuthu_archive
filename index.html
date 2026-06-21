@@ -444,12 +444,16 @@
 
 <script>
   // ===== CONFIGURATION =====
-  // Replace with your published Google Sheet CSV URL
-  // (File > Share > Publish to web > select sheet > CSV)
-  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSzZaFgvBmSlwwXuX5uwXH0IK3bHF0-T4VE0YXnGvklAxQpiG1IY6EPBgL8O73VUAoAf-HT5iawdohs/pub?output=csv";
+  // This must be the published CSV link for the "Form Responses 1" tab specifically
+  // (Open the Sheet -> click the "Form Responses 1" tab -> File > Share > Publish to web
+  //  -> first dropdown: "Form Responses 1" (not "Entire Document") -> second dropdown:
+  //  "Comma-separated values (.csv)" -> Publish -> copy the link below)
+  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSzZaFgvBmSlwwXuX5uwXH0IK3bHF0-T4VE0YXnGvklAxQpiG1IY6EPBgL8O73VUAoAf-HT5iawdohs/pub?gid=1470005638&single=true&output=csv";
 
-  // Expected columns (case-insensitive, flexible order):
-  // Title, Poem, Occasion, Dedicated to, Date, Category, Author
+  // Expected columns as they come from the Google Form (bilingual headers are
+  // matched automatically by findColumnIndex() below, so no manual mapping needed):
+  // Timestamp, Email Address, தலைப்பு (Title), கவிதை (Poem), நிகழ்வு (Occasion),
+  // சமர்ப்பணம் (Dedicated to), தேதி (Date), வகை (Category), ஆசிரியர் பெயர் (Author name)
 
   function parseCSV(text) {
     const rows = [];
@@ -476,19 +480,18 @@
     return rows;
   }
 
-  function normalizeKey(k) {
-    return k.trim().toLowerCase().replace(/\s+/g, '');
-  }
 
   function parseDate(d) {
     if (!d) return null;
     d = d.trim();
-    // Handle DD-MM-YYYY or DD.MM.YYYY
+    // Google Forms date answers come through as M/D/YYYY (e.g. "6/14/2026" = 14 June 2026 —
+    // confirmed since 14 can't be a month, so month comes first here).
     const m = d.match(/^(\d{1,2})[-.\/](\d{1,2})[-.\/](\d{2,4})$/);
     if (m) {
-      let [, dd, mm, yyyy] = m;
+      let [, mm, dd, yyyy] = m;
       if (yyyy.length === 2) yyyy = '20' + yyyy;
-      return new Date(`${yyyy}-${mm.padStart(2,'0')}-${dd.padStart(2,'0')}`);
+      const parsed = new Date(`${yyyy}-${mm.padStart(2,'0')}-${dd.padStart(2,'0')}`);
+      return isNaN(parsed) ? null : parsed;
     }
     const parsed = new Date(d);
     return isNaN(parsed) ? null : parsed;
@@ -515,20 +518,33 @@
       const rows = parseCSV(text);
       if (rows.length < 2) throw new Error('No data');
 
-      const headers = rows[0].map(normalizeKey);
+      // Headers can come from the manually-curated sheet (plain English: "Title", "Poem"...)
+      // or from the Google Form responses tab (bilingual: "தலைப்பு (Title)", "கவிதை (Poem)"...
+      // often with extra spaces). Instead of an exact match, look for either the English
+      // keyword or the Tamil word anywhere inside each header — works against either sheet
+      // with no edits needed, and ignores the Timestamp / Email Address columns automatically
+      // since they won't match any keyword.
+      const rawHeaders = rows[0];
+      function findColumnIndex(keywords) {
+        for (let i = 0; i < rawHeaders.length; i++) {
+          const h = (rawHeaders[i] || '').toLowerCase();
+          if (keywords.some(k => h.includes(k))) return i;
+        }
+        return -1;
+      }
       const idx = {
-        title: headers.indexOf('title'),
-        poem: headers.indexOf('poem'),
-        occasion: headers.indexOf('occasion'),
-        dedicatedto: headers.indexOf('dedicatedto'),
-        date: headers.indexOf('date'),
-        category: headers.indexOf('category'),
-        author: headers.indexOf('author'),
+        title: findColumnIndex(['title', 'தலைப்பு']),
+        poem: findColumnIndex(['poem', 'கவிதை']),
+        occasion: findColumnIndex(['occasion', 'நிகழ்வு']),
+        dedicatedto: findColumnIndex(['dedicated', 'சமர்ப்பணம்']),
+        date: findColumnIndex(['date', 'தேதி']),
+        category: findColumnIndex(['categor', 'வகை']),
+        author: findColumnIndex(['author', 'ஆசிரியர்']),
       };
 
       let poems = rows.slice(1)
         .filter(r => r[idx.poem] && r[idx.poem].trim())
-        .map(r => ({
+        .map((r, originalIndex) => ({
           title: idx.title >= 0 ? r[idx.title]?.trim() : '',
           poem: r[idx.poem]?.trim() || '',
           occasion: idx.occasion >= 0 ? r[idx.occasion]?.trim() : '',
@@ -536,16 +552,22 @@
           dateRaw: idx.date >= 0 ? r[idx.date]?.trim() : '',
           category: idx.category >= 0 ? r[idx.category]?.trim() : '',
           author: idx.author >= 0 ? r[idx.author]?.trim() : '',
+          originalIndex, // row order in the sheet — used as a fallback so newest entries (added at the bottom of the sheet) surface first
         }));
 
       poems.forEach(p => p.dateObj = parseDate(p.dateRaw));
 
-      // Sort: dated poems first (chronological), undated at the end
+      // Sort newest-first: most recently dated poems come first; among
+      // poems sharing a date (or with no date at all) the one added later
+      // in the sheet (higher originalIndex) appears first.
       poems.sort((a, b) => {
-        if (a.dateObj && b.dateObj) return a.dateObj - b.dateObj;
+        if (a.dateObj && b.dateObj) {
+          const diff = b.dateObj - a.dateObj;
+          return diff !== 0 ? diff : b.originalIndex - a.originalIndex;
+        }
         if (a.dateObj && !b.dateObj) return -1;
         if (!a.dateObj && b.dateObj) return 1;
-        return 0;
+        return b.originalIndex - a.originalIndex;
       });
 
       // Build category filter chips
