@@ -557,18 +557,12 @@
 
       poems.forEach(p => p.dateObj = parseDate(p.dateRaw));
 
-      // Sort newest-first: most recently dated poems come first; among
-      // poems sharing a date (or with no date at all) the one added later
-      // in the sheet (higher originalIndex) appears first.
-      poems.sort((a, b) => {
-        if (a.dateObj && b.dateObj) {
-          const diff = b.dateObj - a.dateObj;
-          return diff !== 0 ? diff : b.originalIndex - a.originalIndex;
-        }
-        if (a.dateObj && !b.dateObj) return -1;
-        if (!a.dateObj && b.dateObj) return 1;
-        return b.originalIndex - a.originalIndex;
-      });
+      // Order strictly by submission order in the sheet — Google Forms always appends new
+      // responses as new rows at the bottom, so the highest originalIndex is the most
+      // recently added poem. We deliberately do NOT sort by the Date field here: that field
+      // is the poem's occasion/composition date (which someone might backdate), not the
+      // submission date, so using it for ordering caused entries to jump out of place.
+      poems.sort((a, b) => b.originalIndex - a.originalIndex);
 
       // Build category filter chips
       const categories = [...new Set(poems.map(p => p.category).filter(Boolean))];
