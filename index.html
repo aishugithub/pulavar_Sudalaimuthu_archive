@@ -3,427 +3,379 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>புலவர் ச. சுடலைமுத்து — கவிதை அகராதி</title>
+<title>புலவர் ச. சுடலைமுத்து — கவிதைகள்</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;600;700;800&family=Hind+Madurai:wght@300;400;500;600&family=Source+Serif+4:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;600;700;800;900&family=Hind+Madurai:wght@300;400;500;600&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-  :root {
-    --parchment: #f7f1e3;
-    --parchment-deep: #efe6d2;
-    --ink: #2b2420;
-    --ink-soft: #5a4f44;
-    --maroon: #7a2e2e;
-    --maroon-deep: #5e2222;
-    --gold: #c9a648;
-    --teal: #1f4e4e;
-    --teal-soft: #d8e6e3;
-    --line: #d9cdb4;
-  }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+/* ── Tokens ─────────────────────────────────────────── */
+:root {
+  --parchment:   #f7f1e3;
+  --parchment-dk:#efe6d2;
+  --white:       #ffffff;
+  --ink:         #2b2420;
+  --ink-soft:    #6b5f55;
+  --maroon:      #7a2e2e;
+  --maroon-deep: #5e2222;
+  --maroon-pale: #f9eaea;
+  --gold:        #c9a648;
+  --gold-pale:   #fdf6e3;
+  --teal:        #1f4e4e;
+  --teal-soft:   #d8e6e3;
+  --line:        #e2d8c4;
+  --shadow-sm:   0 1px 4px rgba(43,36,32,0.08);
+  --shadow-md:   0 4px 18px rgba(43,36,32,0.11);
+  --shadow-lg:   0 8px 36px rgba(43,36,32,0.14);
+}
 
-  html, body {
-    overflow-x: hidden;
-    max-width: 100%;
-  }
+/* ── Reset ──────────────────────────────────────────── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+body {
+  font-family:'Hind Madurai', sans-serif;
+  background: var(--parchment);
+  color: var(--ink);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
 
-  body {
-    font-family: 'Hind Madurai', sans-serif;
-    background: var(--parchment);
-    color: var(--ink);
-    line-height: 1.7;
-    background-image:
-      radial-gradient(circle at 20% 10%, rgba(201,166,72,0.06), transparent 40%),
-      radial-gradient(circle at 80% 60%, rgba(122,46,46,0.05), transparent 40%);
-  }
+/* ── Header ─────────────────────────────────────────── */
+header {
+  background: linear-gradient(160deg, var(--maroon-deep) 0%, #8b3636 100%);
+  color: var(--parchment);
+  text-align: center;
+  padding: 48px 20px 40px;
+  position: relative;
+  overflow: hidden;
+}
 
-  /* ===== Header ===== */
-  header {
-    text-align: center;
-    padding: 64px 24px 40px;
-    border-bottom: 1px solid var(--line);
-    position: relative;
-  }
+/* subtle decorative rings */
+header::before, header::after {
+  content:'';
+  position:absolute;
+  border-radius:50%;
+  opacity:0.07;
+  background: var(--gold);
+}
+header::before { width:340px; height:340px; top:-120px; right:-80px; }
+header::after  { width:240px; height:240px; bottom:-100px; left:-60px; }
 
-  .eyebrow {
-    font-family: 'Source Serif 4', serif;
-    font-style: italic;
-    font-size: 14px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--maroon);
-    margin-bottom: 14px;
-  }
+.eyebrow {
+  font-family:'Source Serif 4', serif;
+  font-style:italic;
+  font-size:12px;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color: var(--gold);
+  margin-bottom:14px;
+  position:relative;
+}
 
-  h1 {
-    font-family: 'Catamaran', sans-serif;
-    font-weight: 800;
-    font-size: clamp(30px, 7vw, 64px);
-    color: var(--maroon-deep);
-    letter-spacing: 0.01em;
-    white-space: nowrap;
-  }
+h1 {
+  font-family:'Catamaran', sans-serif;
+  font-weight:900;
+  font-size: clamp(26px, 8vw, 62px);
+  line-height:1.1;
+  color: #fff;
+  letter-spacing:-0.01em;
+  position:relative;
+}
 
-  @media (max-width: 600px) {
-    h1 {
-      font-size: clamp(20px, 7.6vw, 40px);
-      letter-spacing: 0;
-    }
-  }
+.subtitle {
+  font-family:'Hind Madurai', sans-serif;
+  font-weight:300;
+  font-size:15px;
+  color:rgba(247,241,227,0.75);
+  margin-top:10px;
+  position:relative;
+}
 
-  @media (max-width: 380px) {
-    h1 {
-      font-size: 7.2vw;
-    }
-  }
+.gold-rule {
+  width:60px;
+  height:3px;
+  background: var(--gold);
+  border-radius:2px;
+  margin:20px auto 0;
+  position:relative;
+  opacity:0.8;
+}
 
-  .subtitle {
-    font-family: 'Hind Madurai', sans-serif;
-    font-size: 18px;
-    color: var(--ink-soft);
-    margin-top: 10px;
-    font-weight: 400;
-  }
+.poem-counter {
+  display:inline-block;
+  margin-top:18px;
+  background:rgba(255,255,255,0.12);
+  color:rgba(247,241,227,0.9);
+  font-size:13px;
+  font-weight:500;
+  padding:5px 16px;
+  border-radius:999px;
+  letter-spacing:0.04em;
+  position:relative;
+}
 
-  .palm-divider {
-    width: 100%;
-    max-width: 360px;
-    height: 14px;
-    margin: 28px auto 0;
-    background: repeating-linear-gradient(
-      to right,
-      var(--gold) 0px, var(--gold) 2px,
-      transparent 2px, transparent 10px
-    );
-    opacity: 0.6;
-  }
+/* ── Filter bar ─────────────────────────────────────── */
+.filter-bar-wrap {
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:var(--parchment);
+  border-bottom:1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+}
 
-  /* ===== Controls ===== */
-  .controls {
-    max-width: 880px;
-    margin: 36px auto 0;
-    padding: 0 24px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
-  }
+.filter-bar {
+  display:flex;
+  gap:8px;
+  padding:12px 16px;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  flex-wrap:nowrap;         /* horizontal scroll on mobile */
+}
+.filter-bar::-webkit-scrollbar { display:none; }
 
-  .filter-chip {
-    font-family: 'Hind Madurai', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    padding: 8px 20px;
-    border-radius: 999px;
-    border: 1px solid var(--line);
-    background: #fff;
-    color: var(--ink-soft);
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
+.filter-chip {
+  font-family:'Hind Madurai', sans-serif;
+  font-size:14px;
+  font-weight:600;
+  padding:7px 18px;
+  border-radius:999px;
+  border:1.5px solid var(--line);
+  background:var(--white);
+  color:var(--ink-soft);
+  cursor:pointer;
+  white-space:nowrap;
+  flex-shrink:0;
+  transition:all 0.18s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.filter-chip:hover  { border-color:var(--maroon); color:var(--maroon); }
+.filter-chip.active { background:var(--maroon); color:#fff; border-color:var(--maroon); }
 
-  .filter-chip:hover {
-    border-color: var(--maroon);
-    color: var(--maroon);
-  }
+/* ── Poem list ──────────────────────────────────────── */
+main {
+  max-width:680px;
+  margin:0 auto;
+  padding:20px 14px 80px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
 
-  .filter-chip.active {
-    background: var(--maroon);
-    color: var(--parchment);
-    border-color: var(--maroon);
-  }
+/* ── Poem card ──────────────────────────────────────── */
+.poem-card {
+  background:var(--white);
+  border-radius:18px;
+  box-shadow:var(--shadow-md);
+  overflow:hidden;
+  border:1px solid var(--line);
+  transition:box-shadow 0.2s ease, transform 0.2s ease;
+}
+.poem-card:active { transform:scale(0.99); box-shadow:var(--shadow-sm); }
 
-  .add-poem-link {
-    display: inline-block;
-    margin: 28px auto 0;
-    text-align: center;
-    width: 100%;
-  }
+.card-top {
+  padding:18px 18px 0;
+}
 
-  .add-poem-link a {
-    font-family: 'Hind Madurai', sans-serif;
-    font-weight: 600;
-    font-size: 15px;
-    color: var(--teal);
-    text-decoration: none;
-    border-bottom: 2px solid var(--teal-soft);
-    padding-bottom: 2px;
-    transition: border-color 0.2s ease;
-  }
+/* category + date row */
+.poem-meta-row {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px;
+  margin-bottom:10px;
+}
 
-  .add-poem-link a:hover {
-    border-color: var(--teal);
-  }
+.poem-category {
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  padding:3px 11px;
+  border-radius:999px;
+  background:var(--teal-soft);
+  color:var(--teal);
+}
 
-  /* ===== Timeline / Poem List ===== */
-  main {
-    max-width: 760px;
-    margin: 48px auto 100px;
-    padding: 0 24px;
-    position: relative;
-  }
+.poem-date {
+  font-family:'Source Serif 4', serif;
+  font-style:italic;
+  font-size:13px;
+  color:var(--ink-soft);
+}
 
-  main::before {
-    content: "";
-    position: absolute;
-    left: 24px;
-    top: 12px;
-    bottom: 12px;
-    width: 2px;
-    background: linear-gradient(to bottom, transparent, var(--gold) 6%, var(--gold) 94%, transparent);
-    opacity: 0.4;
-  }
+.poem-title {
+  font-family:'Catamaran', sans-serif;
+  font-weight:800;
+  font-size:22px;
+  color:var(--maroon-deep);
+  line-height:1.25;
+  margin-bottom:14px;
+}
 
-  @media (max-width: 600px) {
-    main::before { left: 8px; }
-  }
+/* gold accent line before poem text */
+.poem-body {
+  padding:0 18px 4px;
+  border-left:3px solid var(--gold);
+  margin:0 18px 16px;
+}
 
-  .poem-card {
-    position: relative;
-    padding: 32px 0 32px 56px;
-    border-bottom: 1px dashed var(--line);
-  }
+.poem-text {
+  font-family:'Hind Madurai', sans-serif;
+  font-size:17px;
+  line-height:2.05;
+  color:var(--ink);
+  white-space:pre-line;
+}
 
-  @media (max-width: 600px) {
-    .poem-card { padding-left: 36px; }
-  }
+/* footer meta: author, occasion, dedicated */
+.poem-footer {
+  background:var(--parchment);
+  border-top:1px solid var(--line);
+  padding:12px 18px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
 
-  .poem-card:last-child { border-bottom: none; }
+.meta-item {
+  font-family:'Hind Madurai', sans-serif;
+  font-size:13px;
+  color:var(--ink-soft);
+  display:flex;
+  gap:6px;
+  align-items:baseline;
+  flex-wrap:wrap;
+}
+.meta-item strong {
+  font-weight:600;
+  color:var(--ink);
+  white-space:nowrap;
+}
 
-  .poem-marker {
-    position: absolute;
-    left: 16px;
-    top: 38px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: var(--parchment);
-    border: 2px solid var(--gold);
-  }
+/* PDF button */
+.download-btn {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  width:calc(100% - 36px);
+  margin:12px 18px 16px;
+  padding:12px 0;
+  background:var(--maroon-pale);
+  color:var(--maroon);
+  border:1.5px solid var(--maroon);
+  border-radius:10px;
+  font-family:'Hind Madurai', sans-serif;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+  transition:all 0.18s ease;
+  -webkit-tap-highlight-color:transparent;
+  min-height:46px;  /* comfortable tap target */
+}
+.download-btn:hover   { background:var(--maroon); color:#fff; }
+.download-btn:disabled{ opacity:0.55; cursor:wait; }
+.download-btn svg { width:16px; height:16px; flex-shrink:0; }
 
-  @media (max-width: 600px) {
-    .poem-marker { left: 0; width: 14px; height: 14px; }
-  }
+/* ── Empty / Loading ─────────────────────────────────── */
+.state-msg {
+  text-align:center;
+  padding:72px 24px;
+  font-family:'Source Serif 4', serif;
+  font-style:italic;
+  font-size:17px;
+  color:var(--ink-soft);
+}
 
-  .poem-meta-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
-    margin-bottom: 10px;
-  }
+/* ── Footer ─────────────────────────────────────────── */
+footer {
+  text-align:center;
+  padding:28px 20px 48px;
+  border-top:1px solid var(--line);
+  font-family:'Source Serif 4', serif;
+  font-style:italic;
+  font-size:13px;
+  color:var(--ink-soft);
+}
 
-  .poem-date {
-    font-family: 'Source Serif 4', serif;
-    font-style: italic;
-    font-size: 14px;
-    color: var(--ink-soft);
-  }
+/* ── PDF hidden render area ──────────────────────────── */
+#pdf-render-area {
+  position:fixed; top:-99999px; left:-99999px;
+  width:720px;
+  background:#fdf8ef;
+  padding:56px 60px;
+  box-sizing:border-box;
+}
+.pdf-divider {
+  width:220px; height:12px; margin:0 auto 36px;
+  background:repeating-linear-gradient(to right,var(--gold) 0,var(--gold) 2px,transparent 2px,transparent 9px);
+  opacity:0.55;
+}
+.pdf-title {
+  font-family:'Catamaran',sans-serif; font-weight:800; font-size:30px;
+  color:var(--maroon-deep); text-align:center; margin-bottom:32px; white-space:nowrap;
+}
+.pdf-poem-text {
+  font-family:'Hind Madurai',sans-serif; font-size:19px; line-height:2.05;
+  color:var(--ink); white-space:pre; text-align:center; margin-bottom:44px;
+}
+.pdf-signature {
+  text-align:right; font-family:'Catamaran',sans-serif; font-weight:700; font-size:17px;
+  color:var(--maroon-deep); border-top:1px solid #e6d9bd; padding-top:18px;
+}
+.pdf-signature .pdf-date {
+  font-family:'Source Serif 4',serif; font-style:italic; font-weight:400;
+  font-size:14px; color:var(--ink-soft); margin-top:4px;
+}
 
-  .poem-category {
-    font-family: 'Hind Madurai', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    padding: 3px 12px;
-    border-radius: 999px;
-    background: var(--teal-soft);
-    color: var(--teal);
-  }
-
-  .poem-title {
-    font-family: 'Catamaran', sans-serif;
-    font-weight: 700;
-    font-size: 24px;
-    color: var(--maroon-deep);
-    margin-bottom: 14px;
-  }
-
-  .poem-text {
-    font-family: 'Hind Madurai', sans-serif;
-    font-size: 18px;
-    line-height: 1.95;
-    color: var(--ink);
-    white-space: pre-line;
-    margin-bottom: 16px;
-  }
-
-  .poem-footer-info {
-    font-family: 'Source Serif 4', serif;
-    font-size: 14px;
-    color: var(--ink-soft);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  .poem-footer-info span strong {
-    color: var(--ink);
-    font-weight: 600;
-    font-style: normal;
-  }
-
-  .download-btn {
-    margin-top: 18px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: 'Hind Madurai', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--maroon);
-    background: #fff;
-    border: 1px solid var(--maroon);
-    border-radius: 999px;
-    padding: 8px 18px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .download-btn:hover {
-    background: var(--maroon);
-    color: var(--parchment);
-  }
-
-  .download-btn:disabled {
-    opacity: 0.6;
-    cursor: wait;
-  }
-
-  .download-btn svg {
-    width: 15px;
-    height: 15px;
-    flex-shrink: 0;
-  }
-
-  /* ===== Hidden PDF render template ===== */
-  #pdf-render-area {
-    position: fixed;
-    top: -99999px;
-    left: -99999px;
-    width: 720px;
-    background: #fdf8ef;
-    background-image:
-      radial-gradient(circle at 15% 12%, rgba(201,166,72,0.10), transparent 45%),
-      radial-gradient(circle at 85% 85%, rgba(122,46,46,0.07), transparent 45%);
-    padding: 56px 60px;
-    box-sizing: border-box;
-    border: 1px solid #e6d9bd;
-  }
-
-  .pdf-divider {
-    width: 220px;
-    height: 12px;
-    margin: 0 auto 36px;
-    background: repeating-linear-gradient(
-      to right,
-      var(--gold) 0px, var(--gold) 2px,
-      transparent 2px, transparent 9px
-    );
-    opacity: 0.55;
-  }
-
-  .pdf-title {
-    font-family: 'Catamaran', sans-serif;
-    font-weight: 800;
-    font-size: 30px;
-    color: var(--maroon-deep);
-    text-align: center;
-    margin-bottom: 32px;
-    white-space: nowrap;
-  }
-
-  .pdf-poem-text {
-    font-family: 'Hind Madurai', sans-serif;
-    font-size: 19px;
-    line-height: 2.05;
-    color: var(--ink);
-    white-space: pre;
-    text-align: center;
-    margin-bottom: 44px;
-  }
-
-  .pdf-signature {
-    text-align: right;
-    font-family: 'Catamaran', sans-serif;
-    font-weight: 700;
-    font-size: 17px;
-    color: var(--maroon-deep);
-    border-top: 1px solid #e6d9bd;
-    padding-top: 18px;
-  }
-
-  .pdf-signature .pdf-date {
-    font-family: 'Source Serif 4', serif;
-    font-style: italic;
-    font-weight: 400;
-    font-size: 14px;
-    color: var(--ink-soft);
-    margin-top: 4px;
-  }
-
-  /* ===== States ===== */
-  .loading, .empty {
-    text-align: center;
-    padding: 60px 24px;
-    color: var(--ink-soft);
-    font-family: 'Source Serif 4', serif;
-    font-style: italic;
-    font-size: 17px;
-  }
-
-  /* ===== Footer ===== */
-  footer {
-    text-align: center;
-    padding: 32px 24px 64px;
-    font-family: 'Source Serif 4', serif;
-    font-style: italic;
-    font-size: 14px;
-    color: var(--ink-soft);
-    border-top: 1px solid var(--line);
-  }
-
-  footer a {
-    color: var(--maroon);
-    text-decoration: none;
-  }
-
-  /* ===== Mobile refinements ===== */
-  @media (max-width: 600px) {
-    header { padding: 40px 16px 28px; }
-    .subtitle { font-size: 16px; }
-    main { padding: 0 12px; margin: 32px auto 60px; }
-    .poem-text { font-size: 16px; line-height: 1.85; }
-    .poem-title { font-size: 20px; }
-    .controls { padding: 0 12px; gap: 8px; }
-    .filter-chip { font-size: 13px; padding: 6px 14px; }
-    .poem-footer-info { font-size: 13px; gap: 10px; }
-    .download-btn { font-size: 13px; padding: 7px 14px; }
-  }
+/* ── Desktop enhancements ────────────────────────────── */
+@media (min-width:640px) {
+  header          { padding:64px 40px 52px; }
+  h1              { font-size:clamp(40px,6vw,64px); }
+  .filter-bar     { flex-wrap:wrap; justify-content:center; overflow-x:visible; padding:14px 24px; }
+  main            { padding:28px 24px 100px; gap:20px; }
+  .poem-title     { font-size:26px; }
+  .poem-text      { font-size:18px; }
+  .card-top       { padding:24px 24px 0; }
+  .poem-body      { margin:0 24px 20px; }
+  .poem-footer    { padding:14px 24px; gap:6px; }
+  .download-btn   { width:calc(100% - 48px); margin:14px 24px 20px; }
+}
 </style>
 </head>
 <body>
 
+<!-- ══════════════ HEADER ══════════════ -->
 <header>
   <div class="eyebrow">An Archive of Verse</div>
   <h1>புலவர் ச. சுடலைமுத்து</h1>
-  <p class="subtitle">கவிதைகள் — காலவரிசையில்</p>
-  <div class="palm-divider"></div>
+  <p class="subtitle">கவிதைகள் — ஒரு வாழ்நாள் படைப்புகள்</p>
+  <div class="gold-rule"></div>
+  <div class="poem-counter" id="poem-counter" style="display:none;"></div>
 </header>
 
-<div class="controls" id="filters">
-  <button class="filter-chip active" data-category="all">அனைத்தும்</button>
+<!-- ══════════════ FILTER BAR ══════════════ -->
+<div class="filter-bar-wrap">
+  <div class="filter-bar" id="filters">
+    <button class="filter-chip active" data-category="all">அனைத்தும்</button>
+  </div>
 </div>
 
-<div class="add-poem-link">
-  <a href="https://docs.google.com/forms/d/e/1FAIpQLSevZV7eoDc67VKTV7mpJJLrJXCc9nkMEjtOpd3uprKYzVHisw/viewform" target="_blank" rel="noopener">+ புதிய கவிதையைச் சேர்க்க</a>
-</div>
+<!-- ══════════════ POEM LIST ══════════════ -->
+<main id="poem-list">
+  <div class="state-msg" id="state-msg">கவிதைகள் ஏற்றப்படுகின்றன…</div>
+</main>
 
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <p>புலவர் ச. சுடலைமுத்து அவர்களின் கவிதைகளின் காப்பகம்</p>
+</footer>
+
+<!-- ══════════════ HIDDEN PDF AREA ══════════════ -->
 <div id="pdf-render-area">
   <div class="pdf-divider"></div>
   <div class="pdf-title" id="pdf-title" style="display:none;"></div>
@@ -434,27 +386,10 @@
   </div>
 </div>
 
-<main id="poem-list">
-  <div class="loading">கவிதைகள் ஏற்றப்படுகின்றன…</div>
-</main>
-
-<footer>
-  <p>இது ஒரு வளரும் தொகுப்பு — புலவர் ச. சுடலைமுத்து அவர்களின் கவிதைகளின் காப்பகம்.</p>
-</footer>
-
 <script>
-  // ===== CONFIGURATION =====
-  // This must be the published CSV link for the "Form Responses 1" tab specifically
-  // (Open the Sheet -> click the "Form Responses 1" tab -> File > Share > Publish to web
-  //  -> first dropdown: "Form Responses 1" (not "Entire Document") -> second dropdown:
-  //  "Comma-separated values (.csv)" -> Publish -> copy the link below)
   const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSzZaFgvBmSlwwXuX5uwXH0IK3bHF0-T4VE0YXnGvklAxQpiG1IY6EPBgL8O73VUAoAf-HT5iawdohs/pub?gid=1470005638&single=true&output=csv";
 
-  // Expected columns as they come from the Google Form (bilingual headers are
-  // matched automatically by findColumnIndex() below, so no manual mapping needed):
-  // Timestamp, Email Address, தலைப்பு (Title), கவிதை (Poem), நிகழ்வு (Occasion),
-  // சமர்ப்பணம் (Dedicated to), தேதி (Date), வகை (Category), ஆசிரியர் பெயர் (Author name)
-
+  /* ── CSV parser ── */
   function parseCSV(text) {
     const rows = [];
     let row = [], field = '', inQuotes = false;
@@ -480,21 +415,20 @@
     return rows;
   }
 
-
+  /* ── Date helpers ── */
   function parseDate(d) {
     if (!d) return null;
     d = d.trim();
-    // Google Forms date answers come through as M/D/YYYY (e.g. "6/14/2026" = 14 June 2026 —
-    // confirmed since 14 can't be a month, so month comes first here).
+    // Google Forms: M/D/YYYY
     const m = d.match(/^(\d{1,2})[-.\/](\d{1,2})[-.\/](\d{2,4})$/);
     if (m) {
       let [, mm, dd, yyyy] = m;
       if (yyyy.length === 2) yyyy = '20' + yyyy;
-      const parsed = new Date(`${yyyy}-${mm.padStart(2,'0')}-${dd.padStart(2,'0')}`);
-      return isNaN(parsed) ? null : parsed;
+      const p = new Date(`${yyyy}-${mm.padStart(2,'0')}-${dd.padStart(2,'0')}`);
+      return isNaN(p) ? null : p;
     }
-    const parsed = new Date(d);
-    return isNaN(parsed) ? null : parsed;
+    const p = new Date(d);
+    return isNaN(p) ? null : p;
   }
 
   function formatDate(dateObj, raw) {
@@ -504,28 +438,24 @@
   }
 
   function escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = str || '';
-    return div.innerHTML;
+    const d = document.createElement('div');
+    d.textContent = str || '';
+    return d.innerHTML;
   }
 
+  /* ── Main load ── */
   async function loadPoems() {
     const listEl = document.getElementById('poem-list');
     try {
       const res = await fetch(SHEET_CSV_URL);
-      if (!res.ok) throw new Error('Failed to fetch sheet');
+      if (!res.ok) throw new Error('இணைப்பு தோல்வி');
       const text = await res.text();
       const rows = parseCSV(text);
-      if (rows.length < 2) throw new Error('No data');
+      if (rows.length < 2) throw new Error('தகவல் இல்லை');
 
-      // Headers can come from the manually-curated sheet (plain English: "Title", "Poem"...)
-      // or from the Google Form responses tab (bilingual: "தலைப்பு (Title)", "கவிதை (Poem)"...
-      // often with extra spaces). Instead of an exact match, look for either the English
-      // keyword or the Tamil word anywhere inside each header — works against either sheet
-      // with no edits needed, and ignores the Timestamp / Email Address columns automatically
-      // since they won't match any keyword.
+      /* flexible bilingual header matching */
       const rawHeaders = rows[0];
-      function findColumnIndex(keywords) {
+      function col(keywords) {
         for (let i = 0; i < rawHeaders.length; i++) {
           const h = (rawHeaders[i] || '').toLowerCase();
           if (keywords.some(k => h.includes(k))) return i;
@@ -533,192 +463,156 @@
         return -1;
       }
       const idx = {
-        title: findColumnIndex(['title', 'தலைப்பு']),
-        poem: findColumnIndex(['poem', 'கவிதை']),
-        occasion: findColumnIndex(['occasion', 'நிகழ்வு']),
-        dedicatedto: findColumnIndex(['dedicated', 'சமர்ப்பணம்']),
-        date: findColumnIndex(['date', 'தேதி']),
-        category: findColumnIndex(['categor', 'வகை']),
-        author: findColumnIndex(['author', 'ஆசிரியர்']),
+        title:       col(['title',    'தலைப்பு']),
+        poem:        col(['poem',     'கவிதை']),
+        occasion:    col(['occasion', 'நிகழ்வு']),
+        dedicatedto: col(['dedicated','சமர்ப்பணம்']),
+        date:        col(['date',     'தேதி']),
+        category:    col(['categor',  'வகை']),
+        author:      col(['author',   'ஆசிரியர்']),
       };
 
       let poems = rows.slice(1)
         .filter(r => r[idx.poem] && r[idx.poem].trim())
         .map((r, originalIndex) => ({
-          title: idx.title >= 0 ? r[idx.title]?.trim() : '',
-          poem: r[idx.poem]?.trim() || '',
-          occasion: idx.occasion >= 0 ? r[idx.occasion]?.trim() : '',
-          dedicatedTo: idx.dedicatedto >= 0 ? r[idx.dedicatedto]?.trim() : '',
-          dateRaw: idx.date >= 0 ? r[idx.date]?.trim() : '',
-          category: idx.category >= 0 ? r[idx.category]?.trim() : '',
-          author: idx.author >= 0 ? r[idx.author]?.trim() : '',
-          originalIndex, // row order in the sheet — used as a fallback so newest entries (added at the bottom of the sheet) surface first
+          title:       idx.title       >= 0 ? (r[idx.title]       || '').trim() : '',
+          poem:        idx.poem        >= 0 ? (r[idx.poem]        || '').trim() : '',
+          occasion:    idx.occasion    >= 0 ? (r[idx.occasion]    || '').trim() : '',
+          dedicatedTo: idx.dedicatedto >= 0 ? (r[idx.dedicatedto] || '').trim() : '',
+          dateRaw:     idx.date        >= 0 ? (r[idx.date]        || '').trim() : '',
+          category:    idx.category    >= 0 ? (r[idx.category]    || '').trim() : '',
+          author:      idx.author      >= 0 ? (r[idx.author]      || '').trim() : '',
+          originalIndex,
         }));
 
       poems.forEach(p => p.dateObj = parseDate(p.dateRaw));
-
-      // Order strictly by submission order in the sheet — Google Forms always appends new
-      // responses as new rows at the bottom, so the highest originalIndex is the most
-      // recently added poem. We deliberately do NOT sort by the Date field here: that field
-      // is the poem's occasion/composition date (which someone might backdate), not the
-      // submission date, so using it for ordering caused entries to jump out of place.
+      // newest submission first (bottom of sheet → top of page)
       poems.sort((a, b) => b.originalIndex - a.originalIndex);
 
-      // Build category filter chips
-      const categories = [...new Set(poems.map(p => p.category).filter(Boolean))];
-      const filterContainer = document.getElementById('filters');
-      categories.forEach(cat => {
+      /* counter badge */
+      const counter = document.getElementById('poem-counter');
+      counter.textContent = poems.length + ' கவிதைகள்';
+      counter.style.display = 'inline-block';
+
+      /* category filter chips */
+      const cats = [...new Set(poems.map(p => p.category).filter(Boolean))];
+      const filterBar = document.getElementById('filters');
+      cats.forEach(cat => {
         const btn = document.createElement('button');
         btn.className = 'filter-chip';
         btn.dataset.category = cat;
         btn.textContent = cat;
-        filterContainer.appendChild(btn);
+        filterBar.appendChild(btn);
       });
 
-      filterContainer.addEventListener('click', (e) => {
+      filterBar.addEventListener('click', e => {
         if (!e.target.classList.contains('filter-chip')) return;
         document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
         e.target.classList.add('active');
         render(e.target.dataset.category);
       });
 
+      /* render */
       function render(filter) {
-        const filtered = filter === 'all'
-          ? poems
-          : poems.filter(p => p.category === filter);
-
+        const filtered = filter === 'all' ? poems : poems.filter(p => p.category === filter);
         if (!filtered.length) {
-          listEl.innerHTML = '<div class="empty">இந்தப் பகுப்பில் கவிதைகள் இல்லை.</div>';
+          listEl.innerHTML = '<div class="state-msg">இந்தப் பகுப்பில் கவிதைகள் இல்லை.</div>';
           return;
         }
-
         window.__currentFiltered = filtered;
-
         listEl.innerHTML = filtered.map((p, i) => `
           <div class="poem-card">
-            <div class="poem-marker"></div>
-            <div class="poem-meta-row">
-              ${p.dateObj || p.dateRaw ? `<span class="poem-date">${escapeHtml(formatDate(p.dateObj, p.dateRaw))}</span>` : ''}
-              ${p.category ? `<span class="poem-category">${escapeHtml(p.category)}</span>` : ''}
+            <div class="card-top">
+              <div class="poem-meta-row">
+                ${p.category ? `<span class="poem-category">${escapeHtml(p.category)}</span>` : ''}
+                ${p.dateObj || p.dateRaw ? `<span class="poem-date">${escapeHtml(formatDate(p.dateObj, p.dateRaw))}</span>` : ''}
+              </div>
+              ${p.title ? `<div class="poem-title">${escapeHtml(p.title)}</div>` : ''}
             </div>
-            ${p.title ? `<div class="poem-title">${escapeHtml(p.title)}</div>` : ''}
-            <div class="poem-text">${escapeHtml(p.poem)}</div>
-            <div class="poem-footer-info">
-              ${p.author ? `<span><strong>ஆசிரியர்:</strong> ${escapeHtml(p.author)}</span>` : ''}
-              ${p.dedicatedTo ? `<span><strong>சமர்ப்பணம்:</strong> ${escapeHtml(p.dedicatedTo)}</span>` : ''}
-              ${p.occasion ? `<span><strong>நிகழ்வு:</strong> ${escapeHtml(p.occasion)}</span>` : ''}
+            <div class="poem-body">
+              <div class="poem-text">${escapeHtml(p.poem)}</div>
             </div>
+            ${(p.author || p.dedicatedTo || p.occasion) ? `
+            <div class="poem-footer">
+              ${p.author      ? `<div class="meta-item"><strong>ஆசிரியர்:</strong> ${escapeHtml(p.author)}</div>` : ''}
+              ${p.occasion    ? `<div class="meta-item"><strong>நிகழ்வு:</strong> ${escapeHtml(p.occasion)}</div>` : ''}
+              ${p.dedicatedTo ? `<div class="meta-item"><strong>சமர்ப்பணம்:</strong> ${escapeHtml(p.dedicatedTo)}</div>` : ''}
+            </div>` : ''}
             <button class="download-btn" data-index="${i}">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               PDF பதிவிறக்கம்
             </button>
-          </div>
-        `).join('');
+          </div>`).join('');
       }
 
       render('all');
 
-      // PDF download handler
-      listEl.addEventListener('click', async (e) => {
+      /* PDF handler */
+      listEl.addEventListener('click', async e => {
         const btn = e.target.closest('.download-btn');
         if (!btn) return;
-        const idx = parseInt(btn.dataset.index, 10);
-        const data = window.__currentFiltered[idx];
-        await downloadPoemPDF(data, btn);
+        await downloadPoemPDF(window.__currentFiltered[+btn.dataset.index], btn);
       });
 
     } catch (err) {
       console.error(err);
-      listEl.innerHTML = `<div class="empty">கவிதைகளை ஏற்ற முடியவில்லை. தொடர்பு சரிபார்க்கவும்.<br><small style="font-family:monospace; font-style:normal;">${escapeHtml(err.message)}</small></div>`;
+      listEl.innerHTML = `<div class="state-msg">கவிதைகளை ஏற்ற முடியவில்லை.<br><small style="font-style:normal;font-size:13px;opacity:0.7;">${escapeHtml(err.message)}</small></div>`;
     }
   }
 
+  /* ── PDF generation ── */
   async function downloadPoemPDF(p, btn) {
     const origHTML = btn.innerHTML;
     btn.disabled = true;
     btn.textContent = 'தயாராகிறது…';
-
     try {
-      const titleEl = document.getElementById('pdf-title');
-      const poemEl = document.getElementById('pdf-poem-text');
+      const titleEl  = document.getElementById('pdf-title');
+      const poemEl   = document.getElementById('pdf-poem-text');
       const authorEl = document.getElementById('pdf-author');
-      const dateEl = document.getElementById('pdf-date');
-      const area = document.getElementById('pdf-render-area');
+      const dateEl   = document.getElementById('pdf-date');
+      const area     = document.getElementById('pdf-render-area');
 
-      if (p.title) {
-        titleEl.textContent = p.title;
-        titleEl.style.display = 'block';
-      } else {
-        titleEl.style.display = 'none';
-      }
-
-      poemEl.textContent = p.poem;
+      if (p.title) { titleEl.textContent = p.title; titleEl.style.display = 'block'; }
+      else           titleEl.style.display = 'none';
+      poemEl.textContent   = p.poem;
       authorEl.textContent = p.author || '';
-      dateEl.textContent = (p.dateObj || p.dateRaw) ? formatDate(p.dateObj, p.dateRaw) : '';
+      dateEl.textContent   = (p.dateObj || p.dateRaw) ? formatDate(p.dateObj, p.dateRaw) : '';
 
-      if (document.fonts && document.fonts.ready) await document.fonts.ready;
+      if (document.fonts?.ready) await document.fonts.ready;
       await new Promise(r => setTimeout(r, 80));
 
-      // Determine widest line and shrink font so no line wraps
-      const availableWidth = area.clientWidth - 120; // minus left+right padding
+      const availableWidth = area.clientWidth - 120;
       let fontSize = 19;
       poemEl.style.fontSize = fontSize + 'px';
 
-      // measure widest line using a temporary span
       const measurer = document.createElement('span');
-      measurer.style.visibility = 'hidden';
-      measurer.style.position = 'absolute';
-      measurer.style.whiteSpace = 'pre';
-      measurer.style.fontFamily = "'Hind Madurai', sans-serif";
+      Object.assign(measurer.style, {visibility:'hidden',position:'absolute',whiteSpace:'pre',fontFamily:"'Hind Madurai',sans-serif"});
       document.body.appendChild(measurer);
 
       const lines = p.poem.split('\n');
-      let maxWidth = 0;
-
       function measureMax(size) {
         measurer.style.fontSize = size + 'px';
         let max = 0;
-        for (const line of lines) {
-          measurer.textContent = line || ' ';
-          max = Math.max(max, measurer.offsetWidth);
-        }
+        for (const line of lines) { measurer.textContent = line||' '; max = Math.max(max, measurer.offsetWidth); }
         return max;
       }
-
-      maxWidth = measureMax(fontSize);
-      while (maxWidth > availableWidth && fontSize > 11) {
-        fontSize -= 0.5;
-        maxWidth = measureMax(fontSize);
-      }
-
+      let mw = measureMax(fontSize);
+      while (mw > availableWidth && fontSize > 11) { fontSize -= 0.5; mw = measureMax(fontSize); }
       document.body.removeChild(measurer);
       poemEl.style.fontSize = fontSize + 'px';
 
-      const canvas = await html2canvas(area, {
-        scale: 2,
-        backgroundColor: '#fdf8ef',
-        useCORS: true
-      });
-
+      const canvas = await html2canvas(area, {scale:2, backgroundColor:'#fdf8ef', useCORS:true});
       const imgData = canvas.toDataURL('image/jpeg', 0.95);
       const { jsPDF } = window.jspdf;
-
-      const pdfWidth = 595.28; // A4 width in pt
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-      const pdf = new jsPDF({
-        orientation: pdfHeight > pdfWidth ? 'portrait' : 'landscape',
-        unit: 'pt',
-        format: [pdfWidth, pdfHeight]
-      });
-
-      pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-
-      const filenameBase = (p.title || 'poem').trim().replace(/[^\u0B80-\u0BFFa-zA-Z0-9]+/g, '_').slice(0, 40);
-      pdf.save(`${filenameBase || 'poem'}.pdf`);
+      const pdfW = 595.28;
+      const pdfH = (canvas.height * pdfW) / canvas.width;
+      const pdf = new jsPDF({orientation: pdfH > pdfW ? 'portrait':'landscape', unit:'pt', format:[pdfW,pdfH]});
+      pdf.addImage(imgData, 'JPEG', 0, 0, pdfW, pdfH);
+      const fname = (p.title||'poem').trim().replace(/[^\u0B80-\u0BFFa-zA-Z0-9]+/g,'_').slice(0,40);
+      pdf.save(`${fname||'poem'}.pdf`);
 
     } catch (err) {
-      console.error('PDF generation failed:', err);
+      console.error('PDF error:', err);
       alert('PDF உருவாக்குவதில் சிக்கல். மீண்டும் முயற்சிக்கவும்.');
     } finally {
       btn.disabled = false;
@@ -729,6 +623,5 @@
 
   loadPoems();
 </script>
-
 </body>
 </html>
