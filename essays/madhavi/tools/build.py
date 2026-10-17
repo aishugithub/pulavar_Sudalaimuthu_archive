@@ -26,7 +26,7 @@ def blocks(text):
 def flags(text):
     page, out = None, []
     for line in text.splitlines():
-        m = re.match(r'\[பக்கம் (\d+)\]', line)
+        m = re.match(r'\[((?:பகுதி \d+ · )?பக்கம் \d+)\]', line)
         if m:
             page = m.group(1)
         for w in re.findall(r'\{\?(.*?)\?\}', line):
@@ -88,7 +88,7 @@ def build_docx(text, title, out):
     doc.add_page_break()
     h = doc.add_heading(level=2); add_runs(h, f'சரிபார்க்க வேண்டிய சொற்கள் ({len(fl)})', 14)
     for pg, w in fl:
-        p = doc.add_paragraph(style='List Number'); add_runs(p, f'பக்கம் {pg}: {{?{w}?}}', 11)
+        p = doc.add_paragraph(style='List Number'); add_runs(p, f'{pg}: {{?{w}?}}', 11)
     doc.save(out)
 
 
@@ -118,7 +118,7 @@ def build_html(text, title, out):
         else:
             body.append('<p>' + '<br>'.join(inline_html(l) for l in b.split('\n')) + '</p>')
     fl = flags(text)
-    items = ''.join(f'<li>பக்கம் {pg}: <mark>{html.escape(w)}</mark></li>' for pg, w in fl)
+    items = ''.join(f'<li>{pg}: <mark>{html.escape(w)}</mark></li>' for pg, w in fl)
     page = f'''<!doctype html><html lang="ta"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(title)}</title>
